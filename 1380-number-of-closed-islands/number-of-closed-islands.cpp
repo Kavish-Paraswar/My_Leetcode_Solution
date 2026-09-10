@@ -1,12 +1,11 @@
 class Solution {
 public:
     int n, m;
-    bool bfs(int i, int j, vector<vector<bool>>& vis,
-             vector<vector<int>>& grid) {
+    bool bfs(int i, int j, vector<vector<int>>& grid) {
 
         queue<pair<int, int>> q;
         q.push({i, j});
-        vis[i][j] = true;
+        // vis[i][j] = true;
         vector<vector<int>> dir = {{-1, 0}, {0, -1}, {0, 1}, {1, 0}};
         bool closed = true;
 
@@ -25,9 +24,8 @@ public:
                     temp_col = cur_col + dir[i][1];
 
                 if (temp_row >= 0 && temp_row < n && temp_col >= 0 &&
-                    temp_col < m && !vis[temp_row][temp_col] &&
-                    grid[temp_row][temp_col] == 0) {
-                    vis[temp_row][temp_col] = true;
+                    temp_col < m && grid[temp_row][temp_col] == 0) {
+                    // vis[temp_row][temp_col] = true;
                     q.push({temp_row, temp_col});
                     grid[temp_row][temp_col] = 1;
                 }
@@ -40,12 +38,12 @@ public:
         n = grid.size(), m = grid[0].size();
 
         int count = 0;
-        vector<vector<bool>> vis(n, vector<bool>(m, false));
+        // vector<vector<bool>> vis(n, vector<bool>(m, false));
 
         for (int i = 1; i < n; i++) {
             for (int j = 1; j < m; j++) {
                 if (grid[i][j] == 0)
-                    if (bfs(i, j, vis, grid)) {
+                    if (bfs(i, j, grid)) {
                         count++;
                         grid[i][j] = 1;
                     }
