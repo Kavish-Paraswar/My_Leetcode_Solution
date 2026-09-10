@@ -45,7 +45,7 @@ public:
                 if (grid[i][j] == 0)
                     if (bfs(i, j, grid)) {
                         count++;
-                        grid[i][j] = 1;
+                        // grid[i][j] = 1;
                     }
             }
         }
