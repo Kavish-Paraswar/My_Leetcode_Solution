@@ -12,6 +12,7 @@ public:
 
         while (!q.empty()) {
             auto [cur_row, cur_col] = q.front();
+            grid[cur_row][cur_col] = 1;
             q.pop();
 
             if (cur_row == 0 || cur_row == n - 1 || cur_col == 0 ||
@@ -28,6 +29,7 @@ public:
                     grid[temp_row][temp_col] == 0) {
                     vis[temp_row][temp_col] = true;
                     q.push({temp_row, temp_col});
+                    grid[temp_row][temp_col] = 1;
                 }
             }
         }
@@ -42,9 +44,11 @@ public:
 
         for (int i = 1; i < n; i++) {
             for (int j = 1; j < m; j++) {
-                if (!vis[i][j] && grid[i][j] == 0)
-                    if (bfs(i, j, vis, grid))
+                if (grid[i][j] == 0)
+                    if (bfs(i, j, vis, grid)) {
                         count++;
+                        grid[i][j] = 1;
+                    }
             }
         }
 
