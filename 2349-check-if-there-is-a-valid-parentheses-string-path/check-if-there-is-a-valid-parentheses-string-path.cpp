@@ -1,43 +1,39 @@
 class Solution {
 public:
-    int m, n;
-
-    bool dfs(vector<vector<char>>& grid, int i, int j, int bal,
-             vector<vector<vector<int>>>& dp) {
-        if (i >= m || j >= n)
-            return false;
-
-        if (grid[i][j] == '(')
-            bal++;
-        else
-            bal--;
-
-        if (bal < 0)
-            return false;
-
-        if (dp[i][j][bal] != -1)
-            return dp[i][j][bal];
-
-        if (i == m - 1 && j == n - 1)
-            return dp[i][j][bal] = (bal == 0);
-
-        bool down = dfs(grid, i + 1, j, bal, dp);
-        bool right = dfs(grid, i, j + 1, bal, dp);
-
-        return dp[i][j][bal] = (down || right);
-    }
-
     bool hasValidPath(vector<vector<char>>& grid) {
-        m = grid.size(), n = grid[0].size();
-        vector<vector<vector<int>>> dp(
-            100, vector<vector<int>>(100, vector<int>(201, -1)));
+        int m = grid.size(), n = grid[0].size();
 
-        if ((m + n - 1) % 2 != 0)
+        if ((m + n - 1) % 2 || grid[0][0] == ')' || grid[m - 1][n - 1] == '(')
             return false;
 
-        if (grid[0][0] == ')' || grid[m - 1][n - 1] == '(')
-            return false;
+        vector<vector<vector<bool>>> dp(
+            m, vector<vector<bool>>(n, vector<bool>(m + n, false)));
 
-        return dfs(grid, 0, 0, 0, dp);
+        dp[0][0][1] = true;
+
+        for (int row = 0; row < m; row++) {
+            for (int col = 0; col < n; col++) {
+                for (int bal = 0; bal < m + n; bal++) {
+                    if (!dp[row][col][bal])
+                        continue;
+
+                    if (row + 1 < m) {
+                        int x = bal + (grid[row + 1][col] == '(' ? 1 : -1);
+
+                        if (x >= 0)
+                            dp[row + 1][col][x] = true;
+                    }
+
+                    if (col + 1 < n) {
+                        int x = bal + (grid[row][col + 1] == '(' ? 1 : -1);
+
+                        if (x >= 0)
+                            dp[row][col + 1][x] = true;
+                    }
+                }
+            }
+        }
+
+        return dp[m - 1][n - 1][0];
     }
 };
