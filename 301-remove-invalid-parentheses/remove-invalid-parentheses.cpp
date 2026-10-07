@@ -30,8 +30,12 @@ public:
         }
 
         // s.erase(ind, 1);
-        for (int i = ind; i < temp.length(); i++) {
+        for (int i = ind; i < temp_size; i++) {
             // temp = s;
+            if (i > ind && temp[i] == temp[i - 1] &&
+                (temp[i] == '(' || temp[i] == ')')) {
+                continue;
+            }
             if (temp[i] == '(' && opening > 0) {
                 string next = temp;
                 next.erase(i, 1);
