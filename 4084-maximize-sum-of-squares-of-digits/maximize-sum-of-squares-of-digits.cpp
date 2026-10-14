@@ -16,8 +16,9 @@ public:
         if (sum > 0 && num > 0) {
             ans.push_back('0' + sum);
             num--;
+            sum = 0;
         }
-        while (num > 0) {
+        while (num > 0 && sum == 0) {
             ans.push_back('0');
             num--;
         }
