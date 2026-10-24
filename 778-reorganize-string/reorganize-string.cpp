@@ -2,49 +2,44 @@ class Solution {
 public:
     string reorganizeString(string s) {
         int n = s.length();
-        int limit = (n + 1) / 2;
+        int range = (n + 1) / 2;
 
         map<char, int> m;
-        int maxi = 0;
 
-        for (char& c : s) {
+        for (char c : s) {
             m[c]++;
-            maxi = max(maxi, m[c]);
+            if (m[c] > range)
+                return "";
         }
 
-        if (maxi > limit)
-            return "";
+        priority_queue<pair<int, char>> pq;
 
-        priority_queue<pair<int, char>> maxi_heap;
-
-        for (auto& pair : m) {
-            maxi_heap.push({pair.second, pair.first});
-        }
+        for (auto& it : m)
+            pq.push({it.second, it.first});
 
         string ans;
+        while (pq.size() >= 2) {
+            auto one = pq.top();
+            pq.pop();
+            auto two = pq.top();
+            pq.pop();
 
-        while (maxi_heap.size() >= 2) {
-            auto first = maxi_heap.top();
-            maxi_heap.pop();
-            auto second = maxi_heap.top();
-            maxi_heap.pop();
+            ans.push_back(one.second);
+            ans.push_back(two.second);
 
-            ans += first.second;
-            ans += second.second;
-
-            first.first--;
-            if (first.first > 0) {
-                maxi_heap.push({first.first, first.second});
+            one.first--;
+            if (one.first > 0) {
+                pq.push(one);
             }
-            second.first--;
-            if (second.first > 0) {
-                maxi_heap.push({second.first, second.second});
+
+            two.first--;
+            if (two.first > 0) {
+                pq.push(two);
             }
         }
 
-        if (!maxi_heap.empty()) {
-            auto last = maxi_heap.top();
-            ans += last.second;
+        if (!pq.empty()) {
+            ans += (pq.top().second);
         }
 
         return ans;
