@@ -10,8 +10,6 @@ public:
             next_odd[i] = odd;
             if (nums[i] % 2 == 1)
                 odd = i;
-
-            cout << next_odd[i] << endl;
         }
 
         int left = 0, ans = 0;
