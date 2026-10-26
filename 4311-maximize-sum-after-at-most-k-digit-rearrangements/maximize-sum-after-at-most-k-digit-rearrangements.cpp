@@ -1,61 +1,47 @@
+
 class Solution {
 public:
     long long maximizeSum(vector<int>& nums, int k) {
         int m = nums.size();
-        // sort(nums.begin(), nums.end(), greater<int>());
 
-        vector<int> op2(m, 0);
-        priority_queue<long long, vector<long long>, greater<long long>> pq;
-        long long ans = accumulate(nums.begin(), nums.end(), 0LL);
+        priority_queue<pair<long long, long long>,
+                       vector<pair<long long, long long>>,
+                       function<bool(pair<long long, long long>,
+                                     pair<long long, long long>)>>
+            pq([](auto a, auto b) {
+                return a.second - a.first < b.second - b.first;
+            });
 
-        for (int i = 0; i < nums.size(); i++) {
+        for (int i = 0; i < m; i++) {
             vector<int> dig(10, 0);
 
             int cur = nums[i];
-            int n = -1;
 
             while (cur > 0) {
                 dig[cur % 10]++;
                 cur /= 10;
-                n++;
             }
+
             long long temp = 0;
 
-            for (int i = 9; i > 0; i--) {
-                while (dig[i] > 0) {
-                    temp += (pow(10, n) * i);
-                    n--;
-                    dig[i]--;
+            for (int j = 9; j >= 0; j--) {
+                while (dig[j] > 0) {
+                    temp = temp * 10 + j;
+                    dig[j]--;
                 }
             }
 
-            long long gain = temp - nums[i];
-
-            if (gain > 0 && k > 0) {
-                pq.push(gain);
-
-                if (pq.size() > k)
-                    pq.pop();
-            }
-
-            op2[i] = temp;
+            pq.push({nums[i], temp});
         }
 
-        // long long ans = 0;
-        // for (int i = 0; i < nums.size(); i++) {
-        //     cout << nums[i] << " " << op2[i] << endl;
-        //     if (k > 0 && op2[i] > nums[i]) {
-        //         ans += op2[i];
-        //         k--;
-        //     }
+        long long ans = accumulate(nums.begin(), nums.end(), 0LL);
 
-        //     else
-        //         ans += nums[i];
-        // }
-
-        while (!pq.empty()) {
-            ans += pq.top();
+        while (k > 0 && !pq.empty()) {
+            auto [original, rearranged] = pq.top();
             pq.pop();
+
+            ans += max(original, rearranged) - original;
+            k--;
         }
 
         return ans;
