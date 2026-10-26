@@ -7,7 +7,7 @@ public:
         if (n > m)
             return "";
 
-        map<char, int> freq;
+        vector<int> freq(128, 0);
 
         for (int i = 0; i < n; i++) {
             freq[t[i]]++;
@@ -16,20 +16,19 @@ public:
         int left = 0, mini = INT_MAX, zeros = 0, start = 0;
 
         for (int right = 0; right < m; right++) {
-            if (freq.find(s[right]) != freq.end()) {
-                freq[s[right]]--;
-                zeros += (freq[s[right]] == 0);
+            if (freq[s[right]] > 0) {
+                zeros++;
             }
+            freq[s[right]]--;
 
-            while (zeros == freq.size()) {
+            while (zeros == n) {
                 if (mini > (right - left + 1)) {
                     mini = right - left + 1;
                     start = left;
                 }
-                if (freq.find(s[left]) != freq.end()) {
-                    freq[s[left]]++;
-                    zeros -= (freq[s[left]] > 0);
-                }
+
+                freq[s[left]]++;
+                zeros -= (freq[s[left]] > 0);
                 left++;
             }
         }
