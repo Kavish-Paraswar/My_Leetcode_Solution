@@ -37,8 +37,6 @@ public:
 
                 if (helper(i, j, nums, freq))
                     ans++;
-                // if (j - i + 1 > (n - i) * (n - i + 1) / 2)
-                //     break;
             }
         }
 
