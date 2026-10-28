@@ -5,7 +5,6 @@ public:
 
         vector<vector<vector<bool>>> dp(
             m, vector<vector<bool>>(n, vector<bool>(1024, false)));
-
         dp[0][0][grid[0][0]] = true;
 
         for (int row = 0; row < m; row++) {
