@@ -3,35 +3,31 @@ public:
     int minCost(vector<vector<int>>& grid) {
         int m = grid.size(), n = grid[0].size();
 
-        vector<vector<unordered_set<int>>> dp(m, vector<unordered_set<int>>(n));
+        vector<vector<vector<bool>>> dp(
+            m, vector<vector<bool>>(n, vector<bool>(1024, false)));
 
-        dp[0][0].insert(grid[0][0]);
-
-        int dir[2][2] = {{-1, 0}, {0, -1}};
+        dp[0][0][grid[0][0]] = true;
 
         for (int row = 0; row < m; row++) {
             for (int col = 0; col < n; col++) {
                 if (row == 0 && col == 0)
                     continue;
 
-                for (int i = 0; i < 2; i++) {
-                    int nr = row + dir[i][0];
-                    int nc = col + dir[i][1];
+                for (int val = 0; val < 1024; val++) {
+                    if (row > 0 && dp[row - 1][col][val])
+                        dp[row][col][val ^ grid[row][col]] = true;
 
-                    if (nr >= 0 && nc >= 0) {
-                        for (int val : dp[nr][nc]) {
-                            dp[row][col].insert(val ^ grid[row][col]);
-                        }
-                    }
+                    if (col > 0 && dp[row][col - 1][val])
+                        dp[row][col][val ^ grid[row][col]] = true;
                 }
             }
         }
 
-        int ans = INT_MAX;
+        for (int i = 0; i < 1024; i++) {
+            if (dp[m - 1][n - 1][i])
+                return i;
+        }
 
-        for (int val : dp[m - 1][n - 1])
-            ans = min(ans, val);
-
-        return ans;
+        return -1;
     }
 };
