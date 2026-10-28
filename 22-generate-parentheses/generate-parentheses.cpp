@@ -12,11 +12,10 @@ public:
         if (open > 0) {
             temp.push_back('(');
             helper(open - 1, close, temp);
-
             temp.pop_back();
         }
 
-        if (close > 0 && close > open) {
+        if (close > open) {
             temp.push_back(')');
             helper(open, close - 1, temp);
         }
