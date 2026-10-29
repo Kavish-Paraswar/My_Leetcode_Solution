@@ -1,7 +1,8 @@
 class Solution {
 public:
-    set<vector<int>> s;
+    // set<vector<int>> s;
     int tar;
+    vector<vector<int>> ans;
 
     void dfs(vector<int>& nums, int i, vector<int>& temp, int sum) {
         if (sum > tar) {
@@ -9,7 +10,7 @@ public:
             return;
         }
         if (sum == tar) {
-            s.insert(temp);
+            ans.push_back(temp);
             return;
         }
 
@@ -34,12 +35,11 @@ public:
 
         dfs(nums, 0, temp, sum);
 
-        vector<vector<int>> ans;
-        while (!s.empty()) {
-            vector<int> temp = *s.begin();
-            ans.push_back(temp);
-            s.erase(temp);
-        }
+        // while (!s.empty()) {
+        //     vector<int> temp = *s.begin();
+        //     ans.push_back(temp);
+        //     s.erase(temp);
+        // }
 
         return ans;
     }
