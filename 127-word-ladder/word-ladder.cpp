@@ -1,15 +1,5 @@
 class Solution {
 public:
-    bool check(string a, string b) {
-        int mis = 0;
-
-        for (int i = 0; i < a.length(); i++)
-            if (a[i] != b[i])
-                mis++;
-
-        return mis <= 1;
-    }
-
     int ladderLength(string beginWord, string endWord,
                      vector<string>& wordList) {
         int n = wordList.size();
@@ -24,7 +14,6 @@ public:
 
         queue<pair<string, int>> q;
         q.push({beginWord, 1});
-        // int count = 1e9;
 
         while (!q.empty()) {
             auto obj = q.front();
@@ -36,18 +25,24 @@ public:
                 return score;
             }
 
-            for (string& temp : wordList) {
-                if (temp == cur_str)
-                    continue;
+            for (int i = 0; i < cur_str.length(); i++) {
+                char original = cur_str[i];
 
-                if (set.find(temp) != set.end() && check(temp, cur_str)) {
-                    q.push({temp, score + 1});
-                    set.erase(temp);
+                for (char ch = 'a'; ch <= 'z'; ch++) {
+                    if (ch == original)
+                        continue;
+
+                    cur_str[i] = ch;
+
+                    if (set.find(cur_str) != set.end()) {
+                        q.push({cur_str, score + 1});
+                        set.erase(cur_str);
+                    }
                 }
+                cur_str[i] = original;
             }
+            // if (count == 1e9)
         }
-
-        // if (count == 1e9)
         return 0;
     }
 };
