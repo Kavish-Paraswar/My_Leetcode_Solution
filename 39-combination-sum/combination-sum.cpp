@@ -1,12 +1,10 @@
 class Solution {
 public:
-    // set<vector<int>> s;
     int tar;
     vector<vector<int>> ans;
 
     void dfs(vector<int>& nums, int i, vector<int>& temp, int sum) {
         if (sum > tar) {
-            // temp.pop_back();
             return;
         }
         if (sum == tar) {
@@ -29,18 +27,9 @@ public:
     vector<vector<int>> combinationSum(vector<int>& nums, int target) {
         int n = nums.size();
         tar = target;
-
         vector<int> temp;
-        int sum = 0;
 
-        dfs(nums, 0, temp, sum);
-
-        // while (!s.empty()) {
-        //     vector<int> temp = *s.begin();
-        //     ans.push_back(temp);
-        //     s.erase(temp);
-        // }
-
+        dfs(nums, 0, temp, 0);
         return ans;
     }
 };
