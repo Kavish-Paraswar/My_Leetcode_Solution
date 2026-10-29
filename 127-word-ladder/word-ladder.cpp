@@ -24,7 +24,7 @@ public:
 
         queue<pair<string, int>> q;
         q.push({beginWord, 1});
-        int count = 1e9;
+        // int count = 1e9;
 
         while (!q.empty()) {
             auto obj = q.front();
@@ -33,7 +33,7 @@ public:
             q.pop();
 
             if (cur_str == endWord) {
-                count = min(count, score);
+                return score;
             }
 
             for (string& temp : wordList) {
@@ -47,9 +47,7 @@ public:
             }
         }
 
-        if (count == 1e9)
-            return 0;
-
-        return count;
+        // if (count == 1e9)
+        return 0;
     }
 };
