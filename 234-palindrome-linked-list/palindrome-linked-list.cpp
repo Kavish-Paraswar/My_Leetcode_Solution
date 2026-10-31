@@ -14,13 +14,11 @@ public:
         if (head->next == nullptr)
             return head;
 
-        ListNode *prev = nullptr, *cur = head, *nexty = head->next;
+        ListNode *prev = nullptr, *cur = head;
 
         while (cur != slow) {
-            nexty = cur->next;
-            cur->next = prev;
-            prev = cur;
-            cur = nexty;
+            swap(cur->next, prev);
+            swap(cur, prev);
         }
 
         return prev;
