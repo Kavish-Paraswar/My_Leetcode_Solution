@@ -15,7 +15,7 @@ public:
 
         return true;
     }
-    bool dfs(int row, int col, vector<vector<char>>& board) {
+    bool dfs(vector<vector<char>>& board) {
 
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
@@ -25,7 +25,7 @@ public:
                         if (check(board, i, j, k)) {
                             board[i][j] = k;
 
-                            if (dfs(i, j, board))
+                            if (dfs(board))
                                 return true;
 
                             board[i][j] = '.';
@@ -41,6 +41,6 @@ public:
     void solveSudoku(vector<vector<char>>& board) {
         int m = board.size();
 
-        dfs(0, 0, board);
+        dfs(board);
     }
 };
