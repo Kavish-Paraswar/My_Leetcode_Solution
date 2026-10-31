@@ -10,20 +10,6 @@
  */
 class Solution {
 public:
-    ListNode* reverse(ListNode* head, ListNode* slow) {
-        if (head->next == nullptr)
-            return head;
-
-        ListNode *prev = nullptr, *cur = head;
-
-        while (cur != slow) {
-            swap(cur->next, prev);
-            swap(prev, cur);
-        }
-
-        return prev;
-    }
-
     int pairSum(ListNode* head) {
         if (head->next == nullptr)
             return head->val;
@@ -35,15 +21,19 @@ public:
             fast = fast->next->next;
         }
 
-        ListNode* head2 = slow;
+        ListNode *prev = nullptr, *cur = head;
 
-        ListNode* head1 = reverse(head, slow);
+        while (cur != slow) {
+            swap(cur->next, prev);
+            swap(prev, cur);
+        }
+        ListNode *head2 = slow, *head1 = prev;
 
         int ans = 0;
 
         while (head1 != nullptr) {
             ans = max(ans, head1->val + head2->val);
-            cout << head1->val << " " << head2->val;
+            // cout << head1->val << " " << head2->val;
             head1 = head1->next;
             head2 = head2->next;
         }
