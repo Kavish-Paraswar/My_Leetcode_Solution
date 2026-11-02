@@ -1,30 +1,25 @@
 class Solution {
 public:
-    long long cost(vector<int>& nums, long long target) {
-        long long ans = 0;
-
-        for (int& val : nums) {
-            ans += abs((long long)val - target);
-        }
-
-        return ans;
-    }
     int minMoves2(vector<int>& nums) {
         int n = nums.size();
 
-        int left = *min_element(nums.begin(), nums.end());
-        int right = *max_element(nums.begin(), nums.end());
-        // int ans = ;
+        sort(nums.begin(), nums.end());
+        int target = 0;
 
-        while (left < right) {
-            long long mid = left + (right - left) / 2;
-            if (cost(nums, mid) <= cost(nums, mid + 1)) {
-                right = mid;
-            } else {
-                left = mid + 1;
-            }
+        if (n % 2 == 1) {
+            target = nums[(n / 2)];
         }
 
-        return (int)cost(nums, left);
+        else {
+            target = (nums[n / 2 - 1] + nums[n / 2]) / 2;
+        }
+
+        int ans = 0;
+
+        for (int& val : nums) {
+            ans += abs(val - target);
+        }
+
+        return ans;
     }
 };
