@@ -11,9 +11,17 @@
 class Solution {
 public:
     struct cmp {
-        bool operator()(ListNode* a, ListNode* b) { return a->val > b->val; }
+        const bool operator()(ListNode* a, ListNode* b) {
+            return a->val > b->val;
+        }
     };
+
     ListNode* mergeKLists(vector<ListNode*>& lists) {
+        int n = lists.size();
+
+        if (n == 0)
+            return nullptr;
+
         priority_queue<ListNode*, vector<ListNode*>, cmp> pq;
 
         for (ListNode* head : lists) {
@@ -21,20 +29,22 @@ public:
                 pq.push(head);
         }
 
-        ListNode* dummy = new ListNode(0);
-        ListNode* tail = dummy;
+        ListNode* tail = new ListNode(0);
+        ListNode* head = tail;
+
         while (!pq.empty()) {
-            ListNode* temp = pq.top();
+            ListNode* cur = pq.top();
             pq.pop();
 
-            tail->next = temp;
-            tail = temp;
+            tail->next = cur;
+            tail = cur;
 
-            if (temp->next)
-                pq.push(temp->next);
+            if (cur->next)
+                pq.push(cur->next);
         }
 
         tail->next = nullptr;
-        return dummy->next;
+
+        return head->next;
     }
 };
