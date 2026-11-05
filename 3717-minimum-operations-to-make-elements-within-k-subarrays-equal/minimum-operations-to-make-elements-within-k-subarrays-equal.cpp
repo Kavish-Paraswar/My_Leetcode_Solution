@@ -1,63 +1,147 @@
 class Solution {
 public:
+    // step 1 - cost for all subarry of size x
+    // step 2 - use 2 maps to cal lower and greater values with remove and
+    // deleting them step 3 -  cal cost of that sub of x =
+    //  size of low * median - Sum(value in map low) + sum(value in map(high)
+    //  -size of of high * median
+    // step 4 - store all values and do simple 2d , dp to choose exactly k
+    // subarrays step 5 - dp[n][k] , with all value = 0
+    // step 6 = dp[i][j] =
+    // max(dp[i - x][j - 1] + cost[i -x] ,dp[i - 1][j]); return dp[n - 1][ k -
+    // 1]
+
+    map<int, int> low, high;
+    long long sum_low = 0, sum_high = 0;
+    int low_size = 0, high_size = 0;
+
+    void add(int num) {
+        low[num]++;
+        low_size++;
+        sum_low += num;
+
+        int largest = low.rbegin()->first;
+
+        low[largest]--;
+        low_size--;
+        sum_low -= largest;
+
+        if (low[largest] == 0)
+            low.erase(largest);
+
+        high[largest]++;
+        high_size++;
+        sum_high += largest;
+
+        if (low_size < high_size) {
+            int smallest = high.begin()->first;
+
+            high[smallest]--;
+            high_size--;
+            sum_high -= smallest;
+
+            if (high[smallest] == 0)
+                high.erase(smallest);
+
+            low[smallest]++;
+            low_size++;
+            sum_low += smallest;
+        }
+    }
+
+    void remove(int num) {
+        auto it = low.find(num);
+        if (it != low.end()) {
+            low[num]--;
+            low_size--;
+            sum_low -= num;
+            if (low[num] == 0) {
+                low.erase(num);
+            }
+        }
+
+        else {
+            high[num]--;
+            high_size--;
+            sum_high -= num;
+            
+            if (high[num] == 0) {
+                high.erase(num);
+            }
+        }
+
+        if (low_size < high_size) {
+            int smallest = high.begin()->first;
+
+            high[smallest]--;
+            high_size--;
+            sum_high -= smallest;
+
+            if (high[smallest] == 0)
+                high.erase(smallest);
+
+            low[smallest]++;
+            low_size++;
+            sum_low += smallest;
+        }
+
+        if (low_size > high_size + 1) {
+            int largest = low.rbegin()->first;
+
+            low[largest]--;
+            low_size--;
+            sum_low -= largest;
+
+            if (low[largest] == 0)
+                low.erase(largest);
+
+            high[largest]++;
+            high_size++;
+            sum_high += largest;
+        }
+    }
+
+    long long helper() {
+        long long median = low.rbegin()->first;
+
+        long long cost =
+            median * low_size - sum_low + sum_high - (median * high_size);
+        return cost;
+    }
+
     long long minOperations(vector<int>& nums, int x, int k) {
         int n = nums.size();
-        vector<int> vals(nums);
-        sort(vals.begin(), vals.end());
-        vals.erase(unique(vals.begin(), vals.end()), vals.end());
-        int m = vals.size();
 
-        vector<int> rk(n);
-        for (int i = 0; i < n; i++)
-            rk[i] = lower_bound(vals.begin(), vals.end(), nums[i]) - vals.begin() + 1;
-
-        vector<long long> bc(m + 1, 0), bs(m + 1, 0);
-        vector<int> cntAt(m + 1, 0);
-        auto upd = [&](int i, int c, long long v) {
-            for (; i <= m; i += i & -i) { bc[i] += c; bs[i] += v; }
-        };
-        int LOG = 0;
-        while ((1 << (LOG + 1)) <= m) LOG++;
-        int need = (x + 1) / 2;
-        long long tot = 0;
+        vector<long long> cost(n, 0);
 
         for (int i = 0; i < x; i++) {
-            upd(rk[i], 1, nums[i]); cntAt[rk[i]]++; tot += nums[i];
+            add(nums[i]);
+        }
+        cost[0] = helper();
+
+        for (int i = x; i < n; i++) {
+            add(nums[i]);
+            remove(nums[i - x]);
+            cost[i - x + 1] = helper();
         }
 
-        vector<long long> cost(n - x + 1);
-        for (int s = 0; s + x <= n; s++) {
-            int pos = 0, kk = need;
-            long long accC = 0, accS = 0;
-            for (int b = LOG; b >= 0; b--) {
-                int np = pos + (1 << b);
-                if (np <= m && bc[np] < kk) {
-                    pos = np; kk -= bc[np]; accC += bc[np]; accS += bs[np];
+        vector<vector<long long>> dp(n + 1,
+                                     vector<long long>(k + 1, LLONG_MAX / 4));
+
+        for (int i = 0; i <= n; i++) {
+            dp[i][0] = 0;
+        }
+
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= k; j++) {
+                dp[i][j] = dp[i - 1][j];
+
+                if (i >= j * x) {
+                    dp[i][j] = min(dp[i - x][j - 1] + cost[i - x], dp[i][j]);
                 }
             }
-            int p = pos + 1;
-            long long med = vals[p - 1];
-            long long cntLE = accC + cntAt[p];
-            long long sumLE = accS + cntAt[p] * med;
-            cost[s] = med * cntLE - sumLE + (tot - sumLE) - med * (x - cntLE);
-
-            upd(rk[s], -1, -nums[s]); cntAt[rk[s]]--; tot -= nums[s];
-            if (s + x < n) {
-                upd(rk[s + x], 1, nums[s + x]); cntAt[rk[s + x]]++; tot += nums[s + x];
-            }
         }
 
-        const long long INF = LLONG_MAX / 4;
-        vector<long long> prev(n + 1, 0), cur(n + 1);
-        for (int j = 1; j <= k; j++) {
-            fill(cur.begin(), cur.end(), INF);
-            for (int i = x; i <= n; i++) {
-                long long best = cur[i - 1];
-                if (prev[i - x] < INF) best = min(best, prev[i - x] + cost[i - x]);
-                cur[i] = best;
-            }
-            swap(prev, cur);
-        }
-        return prev[n];
+        return dp[n][k];
     }
 };
