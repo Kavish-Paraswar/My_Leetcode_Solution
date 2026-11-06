@@ -1,62 +1,48 @@
 class Solution {
 public:
-    int m, n, word_size;
     bool flag = false;
+    int m, n, w;
     int dir[4][2] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
 
-    void dfs(string& word, vector<vector<char>>& board, int row, int col,
-             int idx) {
+    void dfs(int row, int col, int ind, vector<vector<char>>& board,
+             string& word) {
+        if (row >= m || col >= n)
+            return;
 
-        if (idx == word_size) {
-            // vis.assign(m, vector<bool>(n, false));
+        if (w == ind) {
             flag = true;
             return;
         }
 
+        char temp = board[row][col];
+        board[row][col] = '0';
+
         for (int i = 0; i < 4; i++) {
-            int next_row = row + dir[i][0], next_col = col + dir[i][1];
+            int cur_row = dir[i][0] + row, cur_col = dir[i][1] + col;
 
-            if (next_row >= 0 && next_row < m && next_col >= 0 &&
-                next_col < n && board[next_row][next_col] != '0' &&
-                board[next_row][next_col] == word[idx]) {
-                char temp = board[next_row][next_col];
-                board[next_row][next_col] = '0';
-                // vis[next_row][next_col] = true;
-                dfs(word, board, next_row, next_col, idx + 1);
+            if (cur_row >= 0 && cur_row < m && cur_col < n && cur_col >= 0 &&
+                board[cur_row][cur_col] != '0' &&
+                board[cur_row][cur_col] == word[ind]) {
 
-                board[next_row][next_col] = temp;
-                // vis[next_row][next_col] = false;
-
-                if (flag)
-                    return;
+                dfs(cur_row, cur_col, ind + 1, board, word);
             }
+
+            if (flag)
+                return;
         }
+        board[row][col] = temp;
     }
     bool exist(vector<vector<char>>& board, string word) {
-
-        m = board.size(), n = board[0].size(), word_size = word.size();
-
-        if (word_size > m * n)
-            return false;
-        // vector<vector<bool>> vis(m, vector<bool>(n, false));
-
-        // if(word_size == 1)
-        //     return wordd[0] == board[0][0]
+        m = board.size(), n = board[0].size();
+        w = word.length();
 
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
-                if (flag)
-                    return true;
-
-                if (word[0] == board[i][j]) {
-                    // vis[i][j] = true;
-                    char temp = board[i][j];
-                    board[i][j] = '0';
-                    dfs(word, board, i, j, 1);
-                    board[i][j] = temp;
-                    // vis[i][j] = false;
-                }
+                if (board[i][j] == word[0])
+                    dfs(i, j, 1, board, word);
             }
+            if (flag)
+                return flag;
         }
 
         return flag;
