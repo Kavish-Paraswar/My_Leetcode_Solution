@@ -15,9 +15,9 @@ public:
         sort(logs.begin(), logs.end(), cmp);
         sort(query.begin(), query.end());
         int i = 0, j = 0;
-        multiset<int> s;
+        unordered_map<int, int> s;
         vector<int> ans(o, 0);
-        int active_servers = 0;
+        // int active_servers = 0;
 
         for (auto& val : query) {
             int cur_query = val[0], idx = val[1];
@@ -26,24 +26,21 @@ public:
 
             while (j < m && logs[j][1] <= high) {
                 int cur_server = logs[j][0];
-
-                if (s.find(cur_server) == s.end())
-                    active_servers++;
-                s.insert(cur_server);
+                s[cur_server]++;
                 j++;
             }
 
             while (i < j && i < m && logs[i][1] < low) {
                 int cur_server = logs[i][0];
-                s.erase(s.find(cur_server));
+                s[cur_server]--;
 
-                if (s.find(cur_server) == s.end())
-                    active_servers--;
+                if (s[cur_server] == 0)
+                    s.erase(cur_server);
 
                 i++;
             }
 
-            ans[idx] = n - active_servers;
+            ans[idx] = n - s.size();
         }
 
         return ans;
