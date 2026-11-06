@@ -1,7 +1,7 @@
 class Solution {
 public:
     // sliding windows + 2 pointers + sort ??
-    static bool cmp(vector<int>& a, vector<int>& b) { return a[1] < b[1]; }
+    // static bool cmp(vector<int>& a, vector<int>& b) { return a[1] < b[1]; }
     vector<int> countServers(int n, vector<vector<int>>& logs, int x,
                              vector<int>& queries) {
         int m = logs.size(), o = queries.size();
@@ -11,6 +11,8 @@ public:
             query[i][0] = queries[i];
             query[i][1] = i;
         }
+
+        auto cmp = [](vector<int>& a, vector<int>& b) { return a[1] < b[1]; };
 
         sort(logs.begin(), logs.end(), cmp);
         sort(query.begin(), query.end());
