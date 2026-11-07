@@ -3,8 +3,7 @@ public:
     int m, n;
     int dir[4][2] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
 
-    void dfs(vector<vector<char>>& grid, int row, int col,
-             vector<vector<bool>>& vis) {
+    void dfs(vector<vector<char>>& grid, int row, int col) {
 
         stack<pair<int, int>> s;
         s.push({row, col});
@@ -19,10 +18,9 @@ public:
                     next_col = cur_col + dir[i][1];
 
                 if (next_row >= 0 && next_row < m && next_col >= 0 &&
-                    next_col < n && !vis[next_row][next_col] &&
-                    grid[next_row][next_col] == '1') {
-                    vis[next_row][next_col] = true;
-                    dfs(grid, next_row, next_col, vis);
+                    next_col < n && grid[next_row][next_col] == '1') {
+                    grid[next_row][next_col] = '0';
+                    dfs(grid, next_row, next_col);
                 }
             }
         }
@@ -30,14 +28,14 @@ public:
     int numIslands(vector<vector<char>>& grid) {
         m = grid.size(), n = grid[0].size();
 
-        vector<vector<bool>> vis(m, vector<bool>(n, false));
+        // vector<vector<bool>> vis(m, vector<bool>(n, false));
         int count = 0;
 
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
-                if (!vis[i][j] && grid[i][j] == '1') {
-                    dfs(grid, i, j, vis);
-                    vis[i][j] = true;
+                if (grid[i][j] == '1') {
+                    grid[i][j] = '0';
+                    dfs(grid, i, j);
                     count++;
                 }
             }
