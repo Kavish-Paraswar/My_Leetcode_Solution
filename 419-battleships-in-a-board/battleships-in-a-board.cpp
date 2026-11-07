@@ -28,10 +28,10 @@ public:
                     bool flag = true;
                     int above = i - 1, lefty = j - 1;
 
-                    if (above >= 0 && above < m && board[above][j] == 'X') {
+                    if (above >= 0 && board[above][j] == 'X') {
                         flag = false;
                     }
-                    if (lefty >= 0 && lefty < n && board[i][lefty] == 'X') {
+                    if (lefty >= 0 && board[i][lefty] == 'X') {
                         flag = false;
                     }
 
