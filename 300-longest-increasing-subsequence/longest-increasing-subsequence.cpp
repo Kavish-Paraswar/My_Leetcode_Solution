@@ -22,11 +22,6 @@ public:
 
         vector<int> dp(n + 1, 0);
 
-        // for (int i = 0; i < n; i++) {
-        //     dp[i][0] = 1;
-        //     dp[0][i] = 1;
-        // }
-
         for (int ind = n - 1; ind >= 0; ind--) {
             for (int last_ind = -1; last_ind < ind; last_ind++) {
                 int not_take = dp[last_ind + 1], take = 0;
