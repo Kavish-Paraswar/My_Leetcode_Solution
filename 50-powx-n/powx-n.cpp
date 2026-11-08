@@ -1,16 +1,5 @@
 class Solution {
 public:
-    double helper(double x, long long n) {
-        if (n == 0)
-            return 1.0;
-
-        double half = helper(x, n / 2);
-
-        if (n % 2 == 0)
-            return half * half;
-
-        return x * half * half;
-    }
     double myPow(double x, int n) {
         if (x == 1)
             return x;
@@ -21,11 +10,25 @@ public:
         }
 
         long long pow = n;
+        double ans = 1.0;
+        double base = x;
 
         if (pow < 0) {
-            return 1.0 / helper(x, -pow);
+            pow = -pow;
         }
 
-        return helper(x, pow);
+        while (pow > 0) {
+            if (pow % 2 == 1) {
+                ans *= base;
+            }
+
+            base *= base;
+            pow /= 2;
+        }
+
+        if (n < 0)
+            return 1.0L / ans;
+
+        return ans;
     }
 };
