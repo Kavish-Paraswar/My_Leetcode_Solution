@@ -3,27 +3,28 @@ public:
     vector<int> busiestServers(int k, vector<int>& arrival, vector<int>& load) {
         int n = arrival.size();
 
-        // finish _time , server no
+        // arrival time + loading time = finish time
+        // finish time , server id
         priority_queue<pair<long long, int>, vector<pair<long long, int>>,
                        greater<pair<long long, int>>>
-            q;
-        // free server nos
-        set<int> s;
+            busy;
+
+        // all the available servers
+        map<int, bool> s;
 
         vector<int> ans(k, 0);
 
         for (int i = 0; i < k; i++) {
-            s.insert(i);
+            s[i] = true;
         }
 
         for (int i = 0; i < n; i++) {
-            long long cur_arrival = arrival[i];
-            long long cur_load = load[i];
+            long long finish_time = arrival[i] + load[i];
             int need = i % k;
 
-            while (!q.empty() && q.top().first <= cur_arrival) {
-                s.insert(q.top().second);
-                q.pop();
+            while (!busy.empty() && busy.top().first <= arrival[i]) {
+                s[busy.top().second] = true;
+                busy.pop();
             }
 
             if (s.empty())
@@ -31,18 +32,20 @@ public:
 
             auto it = s.lower_bound(need);
 
-            if (it == s.end())
+            if (it == s.end()) {
                 it = s.begin();
+            }
 
-            int top_server = *it;
-            s.erase(top_server);
+            int best_server = it->first;
+            // s[best_server] = false;
+            s.erase(best_server);
 
-            ans[top_server]++;
-            q.push({cur_arrival + 1LL * cur_load, top_server});
+            ans[best_server]++;
+            busy.push({finish_time, best_server});
         }
 
-        vector<int> temp;
         int maxi = *max_element(ans.begin(), ans.end());
+        vector<int> temp;
 
         for (int i = 0; i < k; i++) {
             if (ans[i] == maxi)
