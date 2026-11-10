@@ -1,45 +1,51 @@
 class Solution {
 public:
     vector<int> assignTasks(vector<int>& servers, vector<int>& tasks) {
-        int m = servers.size(), n = tasks.size();
+        int n = servers.size(), m = tasks.size();
 
-        // 2 heaps
-        // minheap or set fr available servers { wt, index}
-        // busy servers { time , wt , index}
+        vector<int> ans;
 
-        // server wt , server index
-        set<pair<int, int>> available;
+        // 2 min heaps
+        //  available - server_weight , server_index
 
-        // total time , server wt , server index
-        set<tuple<long long, int, int>> busy;
+        priority_queue<pair<int, int>, vector<pair<int, int>>,
+                       greater<pair<int, int>>>
+            available;
 
-        for (int i = 0; i < m; i++) {
-            available.insert({servers[i], i});
+        // busy -  finish_time ,server_weight ,  server_index
+        priority_queue<tuple<long long, int, int>,
+                       vector<tuple<long long, int, int>>,
+                       greater<tuple<long long, int, int>>>
+            busy;
+
+        for (int i = 0; i < n; i++) {
+            available.push({servers[i], i});
         }
 
         long long time = 0;
-        vector<int> ans(n, 0);
 
-        for (int i = 0; i < n; i++) {
-            int cur_task_time = tasks[i];
-            time = max(time, (long long)i);
+        for (int i = 0; i < m; i++) {
 
-            if (available.empty()) {
-                time = max(time, get<0>(*busy.begin()));
+            //
+            if (available.empty() && time <= get<0>(busy.top())) {
+                time = max(time, get<0>(busy.top()));
             }
 
-            while (!busy.empty() && get<0>(*busy.begin()) <= time) {
-                available.insert(
-                    {get<1>(*busy.begin()), get<2>(*busy.begin())});
-                busy.erase(*busy.begin());
-            }
+            time = max((long long)i, time);
 
-            if (!available.empty()) {
-                ans[i] = available.begin()->second;
-                busy.insert({time + cur_task_time, available.begin()->first,
-                             available.begin()->second});
-                available.erase(available.begin());
+            // pop free servers
+            while (!busy.empty() && get<0>(busy.top()) <= time) {
+                auto [finish_time, server_weight, server_index] = busy.top();
+                available.push({server_weight, server_index});
+                busy.pop();
             }
+            long long cur_task_time = tasks[i];
+            auto [server_weight, server_index] = available.top();
+            available.pop();
+
+            busy.push({cur_task_time + time, server_weight, server_index});
+            ans.push_back(server_index);
+            // time++;
         }
 
         return ans;
