@@ -26,11 +26,12 @@ public:
 
         for (int i = 0; i < m; i++) {
 
-            //
+            // if no available servers , weee need to update time to first busy server end time
             if (available.empty() && time <= get<0>(busy.top())) {
                 time = max(time, get<0>(busy.top()));
             }
 
+            // we need tomake sure that atleast time = cur i 
             time = max((long long)i, time);
 
             // pop free servers
