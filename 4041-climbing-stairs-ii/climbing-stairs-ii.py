@@ -2,12 +2,13 @@ class Solution:
     def climbStairs(self, n: int, costs: List[int]) -> int:
         costs = [0] + costs
         dp = [-1] * (n + 1)
+        dp[0] = 0
 
         def rec(i):
             if i == n:
                 return 0
 
-            if dp[i] != -1:
+            if i != 0 and dp[i] != -1:
                 return dp[i]
 
             take_one = float("inf")
