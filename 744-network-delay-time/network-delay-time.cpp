@@ -20,6 +20,10 @@ public:
             auto [cost, cur_node] = pq.top();
             pq.pop();
 
+            if (cur_node != k && dist[cur_node] < cost) {
+                continue;
+            }
+
             for (auto& node : adj[cur_node]) {
                 if (dist[node.first] > dist[cur_node] + node.second) {
                     dist[node.first] = dist[cur_node] + node.second;
