@@ -10,13 +10,13 @@ public:
 
         if (need1 > need2) {
             long long dif = need1 - need2;
-            long long min_cost = min(costBoth, cost1) * dif;
+            long long min_cost = cost1 * dif;
             ans =
                 min(ans, 1LL * min(cost1 + cost2, costBoth) * need2 + min_cost);
         } else {
 
             long long dif = need2 - need1;
-            long long min_cost = min(costBoth, cost2) * dif;
+            long long min_cost = cost2 * dif;
             ans =
                 min(ans, 1LL * min(cost1 + cost2, costBoth) * need1 + min_cost);
         }
