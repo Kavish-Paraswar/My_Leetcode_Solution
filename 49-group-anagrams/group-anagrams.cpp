@@ -8,29 +8,28 @@ public:
         if (n == 0)
             return ans;
 
-        vector<pair<string, int>> s;
-        vector<string> temp;
+        unordered_map<string, vector<string>> mp;
 
-        for (int i = 0; i < n; i++) {
-            string temp = strs[i];
-            sort(temp.begin(), temp.end());
+        for (auto& str : strs) {
+            vector<int> freq(26, 0);
 
-            s.push_back({temp, i});
-        }
-
-        sort(s.begin(), s.end());
-
-        for (int i = 0; i < n; i++) {
-
-            if (i > 0 && s[i].first != s[i - 1].first) {
-                ans.push_back(temp);
-                temp.clear();
+            for (char c : str) {
+                freq[c - 'a']++;
             }
-            temp.push_back(strs[s[i].second]);
+
+            string key;
+
+            for (int x : freq) {
+                key += to_string(x) + '#';
+            }
+
+            mp[key].push_back(str);
         }
 
-        if (!temp.empty())
-            ans.push_back(temp);
+        for (auto& it : mp) {
+            ans.push_back(it.second);
+        }
+
         return ans;
     }
 };
