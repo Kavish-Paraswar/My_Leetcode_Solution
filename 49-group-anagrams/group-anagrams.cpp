@@ -8,22 +8,14 @@ public:
         if (n == 0)
             return ans;
 
-        map<string, vector<string>> mp;
+        unordered_map<string, vector<string>> mp;
 
         for (auto& str : strs) {
-            vector<int> freq(26, 0);
+            string temp = str;
 
-            for (char c : str) {
-                freq[c - 'a']++;
-            }
+            sort(temp.begin(), temp.end());
 
-            string key;
-
-            for (int x : freq) {
-                key += to_string(x) + '#';
-            }
-
-            mp[key].push_back(str);
+            mp[temp].push_back(str);
         }
 
         for (auto& it : mp) {
