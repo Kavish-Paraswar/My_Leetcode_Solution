@@ -5,8 +5,8 @@ public:
 
         vector<vector<string>> ans;
 
-        if (n == 0)
-            return ans;
+        // if (n == 0)
+        //     return ans;
 
         unordered_map<string, vector<string>> mp;
 
