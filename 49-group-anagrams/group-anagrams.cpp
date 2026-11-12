@@ -8,7 +8,7 @@ public:
         if (n == 0)
             return ans;
 
-        unordered_map<string, vector<string>> mp;
+        map<string, vector<string>> mp;
 
         for (auto& str : strs) {
             vector<int> freq(26, 0);
