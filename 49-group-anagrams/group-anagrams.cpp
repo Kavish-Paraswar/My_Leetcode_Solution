@@ -20,7 +20,7 @@ public:
             string key;
 
             for (int x : freq) {
-                key += to_string(x) + '#';
+                key += to_string(x) + ',';
             }
 
             mp[key].push_back(str);
