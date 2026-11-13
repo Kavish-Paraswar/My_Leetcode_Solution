@@ -27,9 +27,6 @@ public:
             if (cur_k == k + 1)
                 continue;
 
-            // if (cost > dis[u])
-            //     continue;
-
             for (auto neigh : adj[u]) {
                 int v = neigh.first, edge_wt = neigh.second;
 
