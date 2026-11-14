@@ -13,12 +13,12 @@
 class Solution {
 public:
     int ans = 0;
-    int dfs(TreeNode* root, int level) {
+    int dfs(TreeNode* root) {
         if (!root)
             return 0;
 
-        int lefty = dfs(root->left, level + 1);
-        int righty = dfs(root->right, level + 1);
+        int lefty = dfs(root->left);
+        int righty = dfs(root->right);
 
         ans = max(lefty + righty, ans);
         return 1 + max(lefty, righty);
@@ -27,7 +27,7 @@ public:
         if (!root)
             return ans;
 
-        dfs(root, 1);
+        dfs(root);
         return ans;
     }
 };
