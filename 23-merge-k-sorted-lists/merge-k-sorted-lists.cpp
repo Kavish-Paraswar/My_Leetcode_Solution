@@ -19,32 +19,29 @@ public:
     ListNode* mergeKLists(vector<ListNode*>& lists) {
         int n = lists.size();
 
-        if (n == 0)
-            return nullptr;
-
         priority_queue<ListNode*, vector<ListNode*>, cmp> pq;
 
-        for (ListNode* head : lists) {
+        for (int i = 0; i < n; i++) {
+            ListNode* head = lists[i];
             if (head)
                 pq.push(head);
         }
 
         ListNode* tail = new ListNode(0);
-        ListNode* head = tail;
+        ListNode* start = tail;
 
         while (!pq.empty()) {
-            ListNode* cur = pq.top();
+            ListNode* front = pq.top();
             pq.pop();
 
-            tail->next = cur;
-            tail = cur;
-
-            if (cur->next)
-                pq.push(cur->next);
+            tail->next = front;
+            tail = front;
+            if (front->next != nullptr)
+                pq.push(front->next);
         }
 
         tail->next = nullptr;
 
-        return head->next;
+        return start->next;
     }
 };
