@@ -32,7 +32,6 @@ public:
 
                         if (cost < costing[i]) {
                             costing[i] = cost;
-                            ans -= (costing[i] - cost);
                             pq.push({cost, i});
                         }
                     }
