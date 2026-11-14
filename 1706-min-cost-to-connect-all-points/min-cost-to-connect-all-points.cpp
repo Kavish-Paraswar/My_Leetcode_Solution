@@ -14,7 +14,6 @@ public:
             pq;
         pq.push({0, 0});
         vector<bool> vis(n, false);
-        vector<int> costing(n, 1e8);
 
         int ans = 0;
 
