@@ -29,11 +29,7 @@ public:
                 for (int i = 0; i < n; i++) {
                     if (!vis[i]) {
                         int cost = helper(node_id, i, points);
-
-                        if (cost < costing[i]) {
-                            costing[i] = cost;
-                            pq.push({cost, i});
-                        }
+                        pq.push({cost, i});
                     }
                 }
             }
