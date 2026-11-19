@@ -1,32 +1,11 @@
 class Solution:
     def reorderLogFiles(self, logs: list[str]) -> list[str]:
+        def helper(log):
+            identifier, content = log.split(" ", 1)
 
-        letters = {}
-        digits = []
-        # kay karotys
-        for log in logs:
+            if content[0].isdigit():
+                return (1,)
 
-            cur_identifier = ""
+            return (0, content, identifier)
 
-            arr = log.split(" ")
-            cur_identifier = arr[0]
-
-            if arr[1].isdigit():
-
-                digits.append(log)
-            else:
-
-                new_s = " ".join(arr[1:])
-                letters[(new_s, cur_identifier)] = log
-
-        l = sorted(letters.keys())
-
-        ls = []
-        for k in l:
-            ls.append(letters[k])
-
-        # we can directly use python ki default sort
-
-        ls += digits
-
-        return ls
+        return sorted(logs, key=helper)
