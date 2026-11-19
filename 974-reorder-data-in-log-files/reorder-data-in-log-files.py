@@ -18,14 +18,9 @@ class Solution:
                 # string separated by space
                 new_s = " ".join(arr[1:])
                 letters[(new_s, cur_identifier)] = log
-        # let2 own kit dig
-        # key = own kit dig , we will store all  spaces = 4,8
-        # we will push ownkitdig , rather than own kit dig
 
         l = sorted(letters.keys())
-        # dict valyes cant be sorted direclty
-        #  are bhai type cast kelela ki re asa kay karotys 
-        # we need
+
         ls = []
         for k in l:
             ls.append(letters[k])
