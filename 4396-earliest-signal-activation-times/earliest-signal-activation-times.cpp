@@ -12,7 +12,7 @@ public:
             adj[u].push_back({v, delay});
         }
 
-        map<int, set<int>> incoming;
+        unordered_map<int, unordered_set<int>> incoming;
 
         // time , u , v
         priority_queue<tuple<long long, int, int>,
