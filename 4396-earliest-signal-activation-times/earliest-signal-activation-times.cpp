@@ -12,34 +12,33 @@ public:
             adj[u].push_back({v, delay});
         }
 
-        unordered_map<int, unordered_set<int>> incoming;
+        vector<int> incoming(n, 0);
 
-        // time , u , v
-        priority_queue<tuple<long long, int, int>,
-                       vector<tuple<long long, int, int>>,
-                       greater<tuple<long long, int, int>>>
+        // time , node
+        priority_queue<pair<long long, int>, vector<pair<long long, int>>,
+                       greater<pair<long long, int>>>
             q;
 
         for (auto [v, wt] : adj[0]) {
-            q.push({wt, 0, v});
+            q.push({wt, v});
         }
 
         while (!q.empty()) {
-            auto [cur_time, u, v] = q.top();
+            auto [cur_time, u] = q.top();
             q.pop();
 
-            if (ans[v] != -1)
+            if (ans[u] != -1)
                 continue;
 
-            incoming[v].insert(u);
+            incoming[u]++;
 
-            if (incoming[v].size() >= requiredSignals[v]) {
-                ans[v] = cur_time;
+            if (incoming[u] >= requiredSignals[u]) {
+                ans[u] = cur_time;
 
-                for (auto& neigh : adj[v]) {
-                    int delay_time = neigh.second, w = neigh.first;
-                    if (ans[w] == -1)
-                        q.push({cur_time + delay_time, v, w});
+                for (auto& neigh : adj[u]) {
+                    int delay_time = neigh.second, v = neigh.first;
+                    if (ans[v] == -1)
+                        q.push({cur_time + delay_time, v});
                 }
             }
         }
