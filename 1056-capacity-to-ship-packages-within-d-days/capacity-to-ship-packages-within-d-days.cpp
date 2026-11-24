@@ -18,8 +18,7 @@ public:
     int shipWithinDays(vector<int>& weights, int days) {
         int n = weights.size();
 
-        int low = *max_element(weights.begin(), weights.end()),
-            right = accumulate(weights.begin(), weights.end(), 0);
+        int low = *max_element(weights.begin(), weights.end()), right = 1e9;
 
         while (low < right) {
             int mid = low + (right - low) / 2;
