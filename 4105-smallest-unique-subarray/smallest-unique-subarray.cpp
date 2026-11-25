@@ -1,6 +1,6 @@
 class Solution {
 public:
-    long long mod = 1000000007, base = 911382323;
+    long long mod = 1e9 + 7, base = 131;
 
     bool check(int size, vector<long long>& h, vector<long long>& p) {
         int n = h.size() - 1;
